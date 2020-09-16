@@ -9,10 +9,10 @@
 // @grant        none
 // ==/UserScript==
 let yandexInput = document.getElementById('text');
-let keywords =['Гобой', 'Как звучит флейта', 'Кларнет', 'Саксофон', 'Труба'];
+let keywords =['Гобой', 'Как звучит флейта', 'Кларнет', 'Саксофон', 'Труба', 'Гитара'];
 let keyword = keywords[getRandom(0, keywords.length)];
 let btnY = document.getElementsByTagName("button")[0];
-let links = document.links;
+let links = document.links; // вся коллекция ссылок
 let next = document.getElementsByClassName('pager_item_kind_next');
 let i = 0;
 
@@ -28,12 +28,13 @@ if (yandexInput != undefined){
 }else if(location.hostname == "xn----7sbab5aqcbiddtdj1e1g.xn--p1ai"){
     setInterval(()=>{
         let index = getRandom (0, links.length);
-        if (getRandom(0, 101)>=80){ //вероятность возврата на главную страницу яндекс
+        if (getRandom(0, 101)>=75){ //вероятность возврата на главную страницу яндекс
             location.href='https://yandex.ru/';
         }
-        if (links[index].href.indexOf ("xn----7sbab5aqcbiddtdj1e1g.xn--p1ai") !=-1) // алгоритм для возврата на сайт, выбранный  для прогулки
+        if (links[index].href.indexOf ("xn----7sbab5aqcbiddtdj1e1g.xn--p1ai") !=-1){ // алгоритм для возврата на сайт, выбранный  для прогулки
             links.removeAttribute('target');
             links[index].click();
+        }
     },getRandom(3000, 7000));
 }else{
     let nextYandexPage = true;
@@ -46,16 +47,16 @@ if (yandexInput != undefined){
             break;
         }
     }
-    /* if (document.querySelector(".45zuf2").innerText=="10"){ //условие для ограничения. После 10 страницы перейдет в начало
+    if (document.querySelectorAll(".pager__item", ".pager__item_current_yes", ".pager__item_kind_page")[5].innerText=="10"){ //условие для ограничения. После 10 страницы перейдет в начало
         nextYandexPage = false;
-        location.href = 'https://yandex.ru/';*/
-
+        location.href = 'https://yandex.ru/';
+    }
     if (nextYandexPage){ // код для перехода поиска на следующую страницу
 
-        setTimeout(()=>{document.getElementsByClassName('.pager__item_kind_page').click();},getRandom(1000,4000));  //document.querySelectorAll('.pager_item_kind_next')
+        setTimeout(()=>{document.querySelectorAll(".pager__item_kind_next")[0].click();},getRandom(1000,4000));  //document.querySelectorAll('.pager_item_kind_next')
     }
+    
 }
-
 
 function getRandom(min, max){
     return Math.floor(Math.random()*(max-min)+min);
