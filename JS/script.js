@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Bot for Yandex
+// @name         Bot for Yandex (2)
 // @namespace    http://tampermonkey.net/
 // @version      0.1
 // @description  try to take over the world!
@@ -9,18 +9,19 @@
 // @match        https://crushdrummers.ru/*
 // @grant        none
 // ==/UserScript==
+
 let sites = {
     "xn----7sbab5aqcbiddtdj1e1g.xn--p1ai":['Гобой', 'Как звучит флейта', 'Кларнет', 'Саксофон'],
-    "crushdrummers.ru":['Барабанное шоу','Заказать барабанное шоу','Шоу барабанщиков в Москве']
+    "crushdrummers.ru":['Барабанное шоу', 'Заказать барабанное шоу', 'Шоу барабанщиков в Москве']
 };
 let site = Object.keys(sites)[getRandom(0, Object.keys(sites).length)];
 let yandexInput = document.getElementById('text');
-let keywords =sites[site];
+let keywords = sites[site];
 let keyword = keywords[getRandom(0, keywords.length)];
 let btnY = document.getElementsByTagName("button")[0];
 let i = 0;
-let links = document.links; // вся коллекция ссылок
-let next = document.getElementsByClassName('pager_item_kind_next');
+let links = document.links;
+
 
 if (yandexInput != null){
     document.cookie = "site="+site; // "site+"=site;
@@ -36,19 +37,19 @@ if (yandexInput != null){
         i++;
         if (i==keyword.length){
             clearInterval(timerId);
-            btnY.click();
+            links.removeAttribute('target');
+            btnY.click(); //клик по кнопке поиска
         }
     },2000);
 }else if(location.hostname == site){
+    site = getCookie("site");
     setInterval(()=>{
         let index = getRandom (0, links.length);
-        if (getRandom(0, 101)>=80){ //вероятность возврата на главную страницу яндекс
-            location.href='https://yandex.ru/';
+        if (getRandom(0, 101)>=80){ //вероятность возврата на главную страницу гугл
+            location.href='https://www.yandex.ru/';
         }
-        else if (links[index].href.indexOf (site) !=-1){ // алгоритм для возврата на сайт, выбранный  для прогулки
-            links.removeAttribute('target');
+        else if (links[index].href.indexOf (site) !=-1) // алгоритм для возврата на сайт, выбранный  для прогулки
             links[index].click();
-        }
     },getRandom(3000, 7000));
 }else{
     let nextYandexPage = true;
@@ -66,15 +67,15 @@ if (yandexInput != null){
         location.href = 'https://yandex.ru/';
     }
     if (nextYandexPage){ // код для перехода поиска на следующую страницу
-
-        setTimeout(()=>{document.querySelectorAll(".pager__item_kind_next")[0].click();},getRandom(1000,4000));  //document.querySelectorAll('.pager_item_kind_next')
+        setTimeout(()=>{document.querySelectorAll(".pager__item_kind_next")[0].click();},getRandom(1000,4000));
     }
-    
+
 }
 
 function getRandom(min, max){
     return Math.floor(Math.random()*(max-min)+min);
 }
+
 function getCookie(name) {
   let matches = document.cookie.match(new RegExp(
     "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
