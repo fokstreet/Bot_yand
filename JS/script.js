@@ -11,7 +11,7 @@
 // ==/UserScript==
 
 let sites = {
-    "xn----7sbab5aqcbiddtdj1e1g.xn--p1ai":['Труба', 'Оркестр', 'Флейта', 'Гитара'],
+    "xn----7sbab5aqcbiddtdj1e1g.xn--p1ai":['Гобой','Труба', 'Оркестр', 'Флейта', 'Гитара'],
     "crushdrummers.ru":['Барабанное шоу', 'Заказать барабанное шоу', 'Шоу барабанщиков в Москве']
 };
 let site = Object.keys(sites)[getRandom(0, Object.keys(sites).length)];
@@ -32,6 +32,7 @@ if (btnYa != undefined){
 }
 
 if (btnYa != undefined){
+    document.cookie = "site="+site;
     let timerId = setInterval(()=>{
         yandexInput.value+=keyword[i]; //вбивает слово в поисковик. По одной букве с интервалом, заданным рандомно
         i++;
@@ -39,15 +40,15 @@ if (btnYa != undefined){
             clearInterval(timerId);
             btnYa.click(); //клик по кнопке поиска
         }
-    },3000);
+    },1000);
 }else if(location.hostname == site){
-    site = getCookie("site");
+
     setInterval(()=>{
         let index = getRandom (0, links.length);
-        if (getRandom(0, 101)>=70){ //вероятность возврата на главную страницу гугл
+        if (getRandom(0, 101)>=90){ //вероятность возврата на главную страницу гугл
             location.href='https://www.yandex.ru/';
         }
-        else if (links[index].href.indexOf (site) !=-1) // алгоритм для возврата на сайт, выбранный  для прогулки
+        else if (links[index].href.indexOf(site) !=-1) // алгоритм для возврата на сайт, выбранный  для прогулки
             links[index].click();
     },getRandom(3000, 7000));
 }else{
@@ -61,7 +62,7 @@ if (btnYa != undefined){
             break;
         }
     }
-    if (document.querySelectorAll(".pager__item", ".pager__item_current_yes", ".pager__item_kind_page")[5].innerText=="10"){ //условие для ограничения. После 10 страницы перейдет в начало
+    if (document.querySelectorAll(".pager_item", ".pageritem_current_yes", ".pager_item_kind_page")[5].innerText=="10"){ //условие для ограничения. После 10 страницы перейдет в начало
         nextYandexPage = false;
         location.href = 'https://yandex.ru/';
     }
@@ -76,6 +77,7 @@ function getRandom(min, max){
 
 function getCookie(name) {
   let matches = document.cookie.match(new RegExp(
-    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    "(?:^|; )" + name.replace(/([\.$?|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;])"
   ));
   return matches ? decodeURIComponent(matches[1]) : undefined;
+}
