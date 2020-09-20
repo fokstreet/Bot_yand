@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Bot for Yandex (2)
+// @name         Bot for Yandex
 // @namespace    http://tampermonkey.net/
 // @version      0.1
 // @description  try to take over the world!
@@ -12,32 +12,31 @@
 
 let sites = {
     "xn----7sbab5aqcbiddtdj1e1g.xn--p1ai":['Гобой', 'Как звучит флейта', 'Кларнет', 'Саксофон'],
-    "crushdrummers.ru":['Барабанное шоу', 'Заказать барабанное шоу', 'Шоу барабанщиков в Москве']
+    "crushdrummers.ru":['Барабанное шоу', 'Заказать барабанное шоу', 'Шоу барабанщиков в Москве'],
 };
 let site = Object.keys(sites)[getRandom(0, Object.keys(sites).length)];
 let yandexInput = document.getElementById('text');
 let keywords = sites[site];
 let keyword = keywords[getRandom(0, keywords.length)];
-let btnY = document.getElementsByTagName("button")[0];
+let btnY = document.querySelectorAll(".button_js_inited")[0];
 let i = 0;
 let links = document.links;
 
 
-if (yandexInput != null){
-    document.cookie = "site="+site; // "site+"=site;
+if (btnY != undefined){
+    document.cookie = "site="+site;
 }else if (location.hostname=="yandex.ru"){
     site = getCookie("site");
 }else{
     site=location.hostname;
 }
 
-if (yandexInput != null){
+if (btnY != undefined){
     let timerId = setInterval(()=>{
         yandexInput.value+=keyword[i]; //вбивает слово в поисковик. По одной букве с интервалом, заданным рандомно
         i++;
         if (i==keyword.length){
             clearInterval(timerId);
-            links.removeAttribute('target');
             btnY.click(); //клик по кнопке поиска
         }
     },2000);
@@ -69,7 +68,6 @@ if (yandexInput != null){
     if (nextYandexPage){ // код для перехода поиска на следующую страницу
         setTimeout(()=>{document.querySelectorAll(".pager__item_kind_next")[0].click();},getRandom(1000,4000));
     }
-
 }
 
 function getRandom(min, max){
