@@ -18,12 +18,12 @@ let site = Object.keys(sites)[getRandom(0, Object.keys(sites).length)];
 let yandexInput = document.getElementById('text');
 let keywords = sites[site];
 let keyword = keywords[getRandom(0, keywords.length)];
-let btnY = document.querySelectorAll(".button_js_inited")[0];
+let btnYa = document.querySelectorAll(".button_js_inited")[0];
 let i = 0;
 let links = document.links;
 
 
-if (btnY != undefined){
+if (btnYa != undefined){
     document.cookie = "site="+site; // "site+"=site;
 }else if (location.hostname=="yandex.ru"){
     site = getCookie("site");
@@ -31,21 +31,20 @@ if (btnY != undefined){
     site=location.hostname;
 }
 
-if (btnY != undefined){
+if (btnYa != undefined){
     let timerId = setInterval(()=>{
         yandexInput.value+=keyword[i]; //вбивает слово в поисковик. По одной букве с интервалом, заданным рандомно
         i++;
         if (i==keyword.length){
             clearInterval(timerId);
-
-            btnY.click(); //клик по кнопке поиска
+            btnYa.click(); //клик по кнопке поиска
         }
-    },2000);
+    },3000);
 }else if(location.hostname == site){
     site = getCookie("site");
     setInterval(()=>{
         let index = getRandom (0, links.length);
-        if (getRandom(0, 101)>=80){ //вероятность возврата на главную страницу гугл
+        if (getRandom(0, 101)>=70){ //вероятность возврата на главную страницу гугл
             location.href='https://www.yandex.ru/';
         }
         else if (links[index].href.indexOf (site) !=-1) // алгоритм для возврата на сайт, выбранный  для прогулки
@@ -58,10 +57,10 @@ if (btnY != undefined){
             let link = links[i];
             nextYandexPage = false;
             links[i].removeAttribute('target');
-            setTimeout(()=>{link.click();}, getRandom(1000, 4000));
+            setTimeout(()=>{links[i].click();}, getRandom(1000, 4000));
             break;
         }
-    
+    }
     if (document.querySelectorAll(".pager__item", ".pager__item_current_yes", ".pager__item_kind_page")[5].innerText=="10"){ //условие для ограничения. После 10 страницы перейдет в начало
         nextYandexPage = false;
         location.href = 'https://yandex.ru/';
@@ -69,7 +68,6 @@ if (btnY != undefined){
     if (nextYandexPage){ // код для перехода поиска на следующую страницу
         setTimeout(()=>{document.querySelectorAll(".pager__item_kind_next")[0].click();},getRandom(1000,4000));
     }
-  }
 }
 
 function getRandom(min, max){
@@ -81,4 +79,3 @@ function getCookie(name) {
     "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
   ));
   return matches ? decodeURIComponent(matches[1]) : undefined;
-}
