@@ -11,8 +11,8 @@
 // ==/UserScript==
 
 let sites = {
-    "xn----7sbab5aqcbiddtdj1e1g.xn--p1ai":['Гобой', 'Как звучит флейта', 'Кларнет', 'Саксофон'],
-    "crushdrummers.ru":['Барабанное шоу', 'Заказать барабанное шоу', 'Шоу барабанщиков в Москве'],
+    "xn----7sbab5aqcbiddtdj1e1g.xn--p1ai":['Труба', 'Оркестр', 'Флейта', 'Гитара'],
+    "crushdrummers.ru":['Барабанное шоу', 'Заказать барабанное шоу', 'Шоу барабанщиков в Москве']
 };
 let site = Object.keys(sites)[getRandom(0, Object.keys(sites).length)];
 let yandexInput = document.getElementById('text');
@@ -24,7 +24,7 @@ let links = document.links;
 
 
 if (btnY != undefined){
-    document.cookie = "site="+site;
+    document.cookie = "site="+site; // "site+"=site;
 }else if (location.hostname=="yandex.ru"){
     site = getCookie("site");
 }else{
@@ -37,6 +37,7 @@ if (btnY != undefined){
         i++;
         if (i==keyword.length){
             clearInterval(timerId);
+
             btnY.click(); //клик по кнопке поиска
         }
     },2000);
@@ -56,11 +57,11 @@ if (btnY != undefined){
         if(links[i].href.indexOf(site) != -1){
             let link = links[i];
             nextYandexPage = false;
-            links.removeAttribute('target');
+            links[i].removeAttribute('target');
             setTimeout(()=>{link.click();}, getRandom(1000, 4000));
             break;
         }
-    }
+    
     if (document.querySelectorAll(".pager__item", ".pager__item_current_yes", ".pager__item_kind_page")[5].innerText=="10"){ //условие для ограничения. После 10 страницы перейдет в начало
         nextYandexPage = false;
         location.href = 'https://yandex.ru/';
@@ -68,6 +69,7 @@ if (btnY != undefined){
     if (nextYandexPage){ // код для перехода поиска на следующую страницу
         setTimeout(()=>{document.querySelectorAll(".pager__item_kind_next")[0].click();},getRandom(1000,4000));
     }
+  }
 }
 
 function getRandom(min, max){
